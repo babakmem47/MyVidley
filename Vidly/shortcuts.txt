@@ -1,0 +1,3 @@
+
+	Search file or folder:					Ctrl + Shift + N  
+

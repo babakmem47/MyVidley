@@ -1,0 +1,49 @@
+- Create this textbox!
+
+- Create a class: R-click on Model folder - > Add  ->  Class...  ->  Movie.cs     
+		public class Movie
+			{
+				public int Id { get; set; }
+				public string Name { get; set; }
+			}
+		}
+
+- Create a Controller: R-click on Controller folder - > Add  ->  Controller...  ->  MVC 5 Controller - Empty  - > name it: MoviesController
+	namespace Vidly.Controllers
+	{
+		public class MoviesController : Controller
+		{
+			// GET: Movies
+			public ActionResult Index()
+			{
+				return View();
+			}
+		}
+	}
+
+- change the Index action name to 'Random' and create obj to send to View
+		// GET: Movies/Random
+		public ActionResult Random()
+		{
+			var movie = new Movie() { Name = "Matrix" };
+			return View(movie);
+		}
+
+- Create a view: Random.cshtml:  Alt + Enter on Random name or R-click on /View/Movies -> New View
+		@model Vidly.Models.Movie
+		@{
+			ViewBag.Title = "Random";
+			Layout = "~/Views/Shared/_Layout.cshtml";
+		}
+
+		<h2>@Model.Name</h2>
+
+//// CHANGE A THEME ///// 
+- go to www.bootswatch.com -> https://bootswatch.com/3/  -> download Lumen bootstrap -> rename it to bootstrap-lumen.css 
+-> save it to Content folder -> R-click on Content -> Add -> Existing item...  -> select bootstrap-lumen.css
+
+	Change a reference(replace original bootstrap.css with bootstrap-lumen.css)
+- in BundleConfig.cs: rename bootstrap.css in "~/Content/bootstrap.css" with bootstrap-lumen.css
+		bundles.Add(new StyleBundle("~/Content/css").Include(
+							  "~/Content/bootstrap-lumen.css",
+							  "~/Content/site.css"));
