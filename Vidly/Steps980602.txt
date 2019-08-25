@@ -47,3 +47,32 @@
 		bundles.Add(new StyleBundle("~/Content/css").Include(
 							  "~/Content/bootstrap-lumen.css",
 							  "~/Content/site.css"));
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// 02 ASP.NET MVC Fundamentals /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// 10. Action Result /////
+- our action in controller return 'ActionResult' which is a base class and have many sub types like: 
+  ViewResult, PartialViewResult, ContentResult, RedirectResult, JsonResult, FileResult, HttpNotFoundResult, EmptyResult.
+
+- return View(...) :  View method allow us to quickly create a view result. alternatively we can use this:
+		return new ViewResult();   === return View(movie);
+  but the first approach is most common among developers
+
+  we also use others like:
+	return HttpContext("Hello World");	=> return "Hello World" on the page
+	return HttpNotFound();				=> return 404 page error result
+
+  we can redirect the user from one page to another:
+    return RedirectToAction("Index", "Home", new {page = 1, sortBy = "name"});
+
+  the 3th argument: passing argument to the target action
+
+		result: in URL: http://localhost:28363/?page=1&sortBy=name => means we redirected to the home page
+
+
+
+- We could set the return type to 'ViewResult'. This is actually a good practice for UnitTesting
+	public ViewResult Random()
+  
+  but ActionResult is more general and include more sub types
