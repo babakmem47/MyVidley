@@ -64,7 +64,7 @@
 	return HttpNotFound();				=> return 404 page error result
 
   we can redirect the user from one page to another:
-    return RedirectToAction("Index", "Home", new {page = 1, sortBy = "name"});
+	return RedirectToAction("Index", "Home", new {page = 1, sortBy = "name"});
 
   the 3th argument: passing argument to the target action
 
@@ -76,3 +76,53 @@
 	public ViewResult Random()
   
   but ActionResult is more general and include more sub types
+
+
+//// 11. Action Parameters /////
+Action Result: the output of out actions
+Action Parameters: the input of out actions   MVC map any requests to parameters value for action request
+
+	Reuest  ==>  MVC FrameWork  ==>  Action
+
+Parameter values can be embedded in:
+	- In the URL:							/movies/edit/1
+	- In the query string:					/movies/edit?id=1
+	- In the data posted using the form:	id =1
+
+Test this:
+- Create an Edit action:
+		public ActionResult Edit(int id)
+		{
+			return Content("id= " + id);
+		}
+run -> enter /movies/edit/1 and /movies/edit?id=1 in the URL -> the page show id = 1
+
+but if replace id with movieId in our Action it dosn't work!
+
+		public ActionResult Edit(int movieId)
+		{
+			return Content("movieId= " + movieId);
+		}
+
+Unless we change URL to this : /movies/edit?movieId=1
+
+this is because of this line in RouteConfig: 
+				url: "{controller}/{action}/{id}",
+
+
+- We can also use optional parameter:
+		public ActionResult Index(int? pageindex, string sortBy)
+		{
+			if (!pageindex.HasValue)
+				pageindex = 1;
+
+			if (String.IsNullOrWhiteSpace(sortBy))
+				sortBy = "Name";
+
+			return Content(String.Format("pageIndex = {0} & sortBy = {1}", pageindex, sortBy));
+		}
+	the build the project and set url to  http://localhost:..../movies
+
+	We can overwrite this parameter:
+										http://localhost:..../movies?pageIndex=2
+										http://localhost:..../movies?pageIndex=2&sortBy=releaseDate
