@@ -126,3 +126,56 @@ this is because of this line in RouteConfig:
 	We can overwrite this parameter:
 										http://localhost:..../movies?pageIndex=2
 										http://localhost:..../movies?pageIndex=2&sortBy=releaseDate
+
+
+///// 12. Convention based Routing /////
+The default route in RouteConfig.cs works for most scenarios
+But the are situations where we need a route with multiple parameters
+		for example we need a route like this:  /movies/released/2015/04   --> to get movies with released year and month
+
+How to create a custom route for the above need:
+- RouteConfig: create a route before default route because the order of these route matters
+- We need to define routes from the more specific to the most generic
+
+		routes.MapRoute(
+			name: "MoviesByReleaseDate",
+			url: "movies/released/{year}/{month}",									// be careful: not start url with '/'
+			defaults: new { controller = "Movies", action = "ByReleaseDate"}
+		);
+
+- Now we need to define the ByReleaseDate action in MoviesController:
+
+		public ActionResult ByReleaseDate(int year, int month)
+		{
+			return Content(year + " / " + month);
+		}
+
+- in the Browser, set the url:
+		http://localhost:..../movies/released			--> Error: because url has not match any of our route pattern
+
+		http://localhost:..../movies/released/2015/4    --> OK
+
+- We can also add constrains to out routes. 
+  For example we want to enforce the year and month parameters to be 4 and 2 digits respectively
+  So we add another argument to our custom route and use Regular Expression:
+
+		   constraints: new { year = @"\d{4}", month = @"\d{2}"}
+
+- So the ultimate version of our custom route look like below:
+
+			routes.MapRoute(
+				name: "MoviesByReleaseDate",
+				url: "movies/released/{year}/{month}",
+				defaults: new { controller = "Movies", action = "ByReleaseDate"},
+				constraints: new { year = @"\d{4}", month = @"\d{2}"}
+			);
+
+- Now in the Browser, if we refresh we got 404 error:
+		http://localhost:..../movies/released/2015/4			--> 404 Error: because of our constrain
+
+  But if we add a zero, we can see the result
+		http://localhost:..../movies/released/2015/04			--> OK
+
+- We can also constrain a year to 2015 and 2016(limit the route parameters to few specific values):
+		
+			constraints: new { year = @"2015|2016", month = @"\d{2}"}
