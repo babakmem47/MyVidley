@@ -1,3 +1,7 @@
 
 	Search file or folder:					Ctrl + Shift + N  
 
+	Close a tab:							Ctrl + F4    also  Shift + Esc
+
+
+

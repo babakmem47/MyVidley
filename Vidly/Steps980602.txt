@@ -128,7 +128,7 @@ this is because of this line in RouteConfig:
 										http://localhost:..../movies?pageIndex=2&sortBy=releaseDate
 
 
-///// 12. Convention based Routing /////
+///// 12. Convention-based Routing /////
 The default route in RouteConfig.cs works for most scenarios
 But the are situations where we need a route with multiple parameters
 		for example we need a route like this:  /movies/released/2015/04   --> to get movies with released year and month
@@ -179,3 +179,39 @@ How to create a custom route for the above need:
 - We can also constrain a year to 2015 and 2016(limit the route parameters to few specific values):
 		
 			constraints: new { year = @"2015|2016", month = @"\d{2}"}
+
+///// 13. Attribute Routing /////
+The above method(Convention-based Routing) has 3 fault:
+	1. in the future, when the number of route inrease, RouteConfig.cs growth with a lot of custom route and becomes a mess!
+	2. We have to go back and forth between our actions and our custom routes
+	3. the magic string in our custom route for the name of our action in the controller: if we change the name, it 
+	has to be change manually!
+
+- in MVC5, Microsoft introduce a cleaner and better way to create custom route:
+- We can apply custom route using an attribute for our action
+
+1. In order to use Attribute Routing, we need to enable it first
+		
+		Routeconfig.cs -> routes.MapMvcAttributeRoutes();
+
+2. Delete previous(Convention-based) route. Save RouteConfig.cs and close it!
+
+3. Back to our controller -> apply below attribute to the top of our action:
+
+	[Route("movies/released/{year}/{month}")]
+
+4. To apply our constrain, use ':'		constrain:the length of month has to be 2 number
+
+	[Route("movies/released/{year}/{month:regex(\\d{2})}")]				regex is like a function     use two \\ 
+
+5. We can also apply other types of constrains. For example we can apply a second constrain to month and force this
+to be a number between 1 and 12:
+
+	[Route("movies/released/{year}/{month:regex(\\d{2}):range(1, 12)}")]
+
+We also have other constrains: min, max, minlength, maxlength, int, float, guid, ...
+If you need, google MVC Attribute Route Constrains
+
+
+
+
