@@ -10,12 +10,19 @@ namespace Vidly.Controllers
         public ActionResult Random()
         {
             var movie = new Movie() { Name = "Matrix" };
+
+            //ViewData["Movie"] = movie;
+            //ViewBag.Movie = movie;
+            return View(movie);
+
+            //var viewResult = new ViewResult();
+            //viewResult.ViewData.Model
             //return View(movie);
             //return new ViewResult();
             //return HttpContext("Hello World");
             //return HttpNotFound();        => //return 404 page error result
             //return new EmptyResult();     => //return empty page
-            return RedirectToAction("Index", "Home", new { page = 1, sortBy = "name" });
+            //return RedirectToAction("Index", "Home", new { page = 1, sortBy = "name" });
         }
 
         public ActionResult Edit(int id)

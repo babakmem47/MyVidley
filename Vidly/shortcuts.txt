@@ -3,5 +3,9 @@
 
 	Close a tab:							Ctrl + F4    also  Shift + Esc
 
+	Go to View in Controller:				Ctrl + B (cursor has to be on View word)
 
+	Comment /*  */							Select lines => Ctrl + K, Ctrl + C
+
+	UnComment								Select lines => Ctrl + K, Ctrl + U
 

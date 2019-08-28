@@ -212,6 +212,68 @@ to be a number between 1 and 12:
 We also have other constrains: min, max, minlength, maxlength, int, float, guid, ...
 If you need, google MVC Attribute Route Constrains
 
+///// 14. Passing Data to Views /////
+There are 3 ways to do this:
+	1. passing data(object) as an argument to the View() method:
+		
+		public ActionResult Random()
+		{
+			var movie = new Movie() { Name = "Matrix" };
+			return View(movie);
+		}
+
+	This is the best way. Just use this in the future.
+
+	Where does movie object go in the ViewResult? 
+	If we define an instance of ViewResult, the movie object assign to 'Model' property(below)
+
+			var viewResult = new ViewResult();
+			viewResult.ViewData.Model  -> our movie obj assign to this property
+
+	And the View() method will take care of that and we dont have to write all this extra code.
+
+	ViewData: is not a regular dictionary. It is a ViewDataDictionary
+	So we can either 
+		use it as a dictionary with KeyValue pairs 
+		or use its Model property to work with an object(preffered way)
+	
+	
+	2. use ViewData dictionary:
+
+		public ActionResult Random()
+		{
+			var movie = new Movie() { Name = "Matrix" };
+
+			ViewData["Movie"] = movie;
+			return View();
+		}
+
+		Then go to View -> instead of using @Model.Name, we need to use @ViewData["Movie"]
+
+		But we can't access the name property of our movie because each item of our dictionary is of type object. 
+				
+				@ViewData["Movie"].  <--- nothing show after .
+
+		So we need to explicitly cast it to movie. The code is ugly:
+
+				@(  ((Movie)ViewData["Movie"]).Name )
+
+		Another problem is the magic string "Movie": if we change it we need to go to View and change it manually.
+		So this way of passing data to the View is fragile
 
 
+	3. use ViewBag : is a dynamic type
+		Microsoft decide to improve ViewData in the very poor way
+			
+		public ActionResult Random()
+		{
+			var movie = new Movie() { Name = "Matrix" };
+
+			ViewBag.Movie = movie;
+			return View();	
+		}
+
+		this 'Movie' property added to the ViewBag at runtime   => means we dont get compile time safety.
+		Also it is a magic property, if we change it, we have to remember to change it in the View.
+		And we have casting issue as well
 
